@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from typing import Optional, TYPE_CHECKING
-from contextlib import asynccontextmanager
 
 if TYPE_CHECKING:
     from ..api.manager import Manager
