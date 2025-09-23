@@ -45,6 +45,7 @@ class Dispatcher:
 
     async def handle_message(self, msg, bot):
         if int(msg.user_id) == int(bot.bot_id):
+            logging.info("Skipping my own message..")
             return
 
         logging.info("Handling message")

@@ -84,7 +84,7 @@ async def notify(discussion: Discussion):
         discussion.created_at,
         discussion.updated_at,
         discussion.content, # Content of first post (TS)
-        discussion.tag, # e.g. 7 for Off-topic
+        discussion.tag, # e.g. 7 for Off-topic ; None if there is no tag
         discussion.first_post_id,
         discussion.raw # Raw json
     )

@@ -15,7 +15,7 @@ from .api.api_references import ApiReference
 from .models.models import Discussion
 
 class Bot:
-    def __init__(self, token: str, bot_id: int, discussion_id: int, api_reference: ApiReference, session: aiohttp.ClientSession | None = None) -> None:
+    def __init__(self, token: str, bot_id: int, api_reference: ApiReference, discussion_id: int = None, session: aiohttp.ClientSession | None = None) -> None:
         validate_token(token)
 
         self._token = token
@@ -51,13 +51,14 @@ class Bot:
         logging.info("Listening for new posts and discussions...")
         while True:
             try:
-                new_posts = await self.manager.fetch_new_posts()
-                for post_id in new_posts:
-                    msg = await self.manager.parse_post(post_id)
-                    if not msg or not msg.message:
-                        continue
-                    logging.info(f"New message: {msg.message}")
-                    await self.dispatcher.handle_message(msg, self)
+                if self.discussion_id is not None:
+                    new_posts = await self.manager.fetch_new_posts()
+                    for post_id in new_posts:
+                        msg = await self.manager.parse_post(post_id)
+                        if not msg or not msg.message:
+                            continue
+                        logging.info(f"New message: {msg.message}")
+                        await self.dispatcher.handle_message(msg, self)
 
                 discussion: Discussion | None = await self.manager.fetch_new_discussion()
                 if discussion:

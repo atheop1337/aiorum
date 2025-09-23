@@ -243,6 +243,11 @@ class Manager:
                 raw_html = first_post.get("attributes", {}).get("contentHtml", "")
                 content, reply_id = HTMLStripper.strip_html_and_extract_reply_id(raw_html)
 
+        try:
+            tag = relationships["tags"]["data"][0]["id"]
+        except IndexError:
+            tag = None
+
         return Discussion(
             id=discussion.get("id"),
             title=attributes.get("title"),
@@ -252,7 +257,7 @@ class Manager:
             created_at=attributes.get("createdAt"),
             updated_at=attributes.get("lastPostedAt"),
             content=content,
-            tag=relationships["tags"]["data"][0]["id"],
+            tag=tag,
             first_post_id=included[0]["id"],
             raw=data,
             _manager=self
