@@ -92,3 +92,8 @@ class Discussion:
             raise NotAttachedToManager("Discussion is not attached to a manager")
         return await self._manager.edit_post(content, int(self.first_post_id))
 
+    async def delete(self):
+        if not self._manager:
+            raise NotAttachedToManager("Discussion is not attached to a manager")
+        return await self._manager.delete_discussion(int(self.id))
+
