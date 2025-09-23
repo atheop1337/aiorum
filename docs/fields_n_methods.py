@@ -91,6 +91,7 @@ async def notify(discussion: Discussion):
 
     await discussion.reply("Hi there!")                 # Reply to the new discussion
     await discussion.edit_first_post("Edited TS post!") # Edit the first post
+    await discussion.delete()                           # Delete discussion
 
 
 async def worker():
