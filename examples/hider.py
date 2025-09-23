@@ -14,7 +14,6 @@ load_dotenv()
 bot = Bot(
     token=getenv("TOKEN"),
     bot_id=8033,
-    discussion_id=18508,
     api_reference=ApiReference("https://forum.wayzer.ru/api/")
 )
 
