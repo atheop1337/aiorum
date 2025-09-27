@@ -14,6 +14,7 @@ bot = Bot(
     token=getenv("TOKEN") or "YOUR_TOKEN", # str: Your token (flarum_remember cookie)
     bot_id=1337, # int: Your account ID
     discussion_id=1337, # int: Discussion id where the bot will work
+    interval=60, # int: The interval at which requests will be sent (Default: 10)
     api_reference=ApiReference("https://forum.example.com/api/")
     # str: API base URL (your forum link + "/api/")
 )
