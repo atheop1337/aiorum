@@ -15,12 +15,13 @@ from .api.api_references import ApiReference
 from .models.models import Discussion
 
 class Bot:
-    def __init__(self, token: str, bot_id: int, api_reference: ApiReference, discussion_id: int = None, session: aiohttp.ClientSession | None = None) -> None:
+    def __init__(self, token: str, bot_id: int, api_reference: ApiReference, interval: int = 10, discussion_id: int = None, session: aiohttp.ClientSession | None = None) -> None:
         validate_token(token)
 
         self._token = token
         self._bot_id = bot_id
         self._discussion_id = discussion_id
+        self._interval = interval
 
         self.api_reference = api_reference
 
@@ -65,7 +66,7 @@ class Bot:
                     logging.info(f"New discussion detected: {discussion.title}")
                     await self.dispatcher.handle_new_discussion(discussion)
 
-                await asyncio.sleep(5)
+                await asyncio.sleep(self.interval)
 
             except asyncio.TimeoutError:
                 logging.warning("Timeout in listen loop (network issue?)")
@@ -86,6 +87,10 @@ class Bot:
     @property
     def discussion_id(self) -> int:
         return self._discussion_id
+
+    @property
+    def interval(self) -> int:
+        return self._interval
 
     @property
     def session(self) -> aiohttp.ClientSession:
