@@ -25,7 +25,7 @@ Make your forum bots **faster, smarter, and more powerful** ⚡
 ## 📖 Documentation
 
 - 📂 [Examples](https://github.com/atheop1337/aiorum/tree/main/examples) — ready-to-use bot samples  
-- 📚 [Docs](https://github.com/atheop1337/aiorum/tree/main/docs) — detailed API reference and guides
+- 📚 [Docs](https://github.com/atheop1337/aiorum/tree/main/docs) — detailed API reference and guides 
 ---
 
 ## 📜 License
