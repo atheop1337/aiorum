@@ -102,3 +102,12 @@ class Discussion:
             raise NotAttachedToManager("Discussion is not attached to a manager")
         return await self._manager.lock_discussion(int(self.id))
 
+    async def approve(self):
+        if not self._manager:
+            raise NotAttachedToManager("Discussion is not attached to a manager")
+        return await self._manager.add_tag(int(self.id), 9)
+
+    async def reject(self):
+        if not self._manager:
+            raise NotAttachedToManager("Discussion is not attached to a manager")
+        return await self._manager.add_tag(int(self.id), 13)

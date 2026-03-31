@@ -180,6 +180,24 @@ class Manager:
         }
         return await self.api_client.request("PATCH", url, data=data)
 
+    async def add_tag(self, discussion_id: int, tag_id: int) -> dict:
+        url = self.api_reference.discussion(discussion_id)
+        data = {
+            "data": {
+                "type": "discussions",
+                "attributes": {},
+                "relationships": {
+                "tags": {
+                    "data": [{
+                        "type": "tags",
+                        "id": f"{tag_id}"
+                    }]
+                }
+                }
+            }
+        }
+        return await self.api_client.request("PATCH", url, data=data)
+
     async def fetch_new_posts(self, max_retries: int = 3) -> list[str]:
         url = self.api_reference.discussion(self.discussion_id)
 
