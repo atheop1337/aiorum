@@ -167,6 +167,19 @@ class Manager:
         }
         return await self.api_client.request("PATCH", url, data=data)
 
+    async def lock_discussion(self, discussion_id: int) -> dict:
+        url = self.api_reference.discussion(discussion_id)
+        data = {
+            "data": {
+                "type": "discussions",
+                "id": str(discussion_id),
+                "attributes": {
+                    "isLocked": True
+                }
+            }
+        }
+        return await self.api_client.request("PATCH", url, data=data)
+
     async def fetch_new_posts(self, max_retries: int = 3) -> list[str]:
         url = self.api_reference.discussion(self.discussion_id)
 

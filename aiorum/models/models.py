@@ -97,3 +97,8 @@ class Discussion:
             raise NotAttachedToManager("Discussion is not attached to a manager")
         return await self._manager.delete_discussion(int(self.id))
 
+    async def lock(self):
+        if not self._manager:
+            raise NotAttachedToManager("Discussion is not attached to a manager")
+        return await self._manager.lock_discussion(int(self.id))
+
