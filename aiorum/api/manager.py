@@ -293,11 +293,13 @@ class Manager:
             if first_post:
                 raw_html = first_post.get("attributes", {}).get("contentHtml", "")
                 content, reply_id = HTMLStripper.strip_html_and_extract_reply_id(raw_html)
+                first_post_id = first_post.get("id")
 
         try:
             tags = [t["id"] for t in relationships.get("tags", {}).get("data", [])]
         except: #type: ignore
             tags = None
+
         return Discussion(
             id=discussion.get("id"),
             title=attributes.get("title"),
@@ -308,7 +310,7 @@ class Manager:
             updated_at=attributes.get("lastPostedAt"),
             content=content,
             tags=tags,
-            first_post_id=included[0]["id"] if included else None,
+            first_post_id=first_post_id,
             raw=data,
             _manager=self
         )
