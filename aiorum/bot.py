@@ -25,7 +25,7 @@ class Bot:
 
         self.api_reference = api_reference
 
-        self.api_client = ApiClient(token, session=session)
+        self.api_client = ApiClient(token, session=session, bot_id=bot_id)
         self.manager = Manager(self.api_client, discussion_id=discussion_id, bot_id=self._bot_id, api_reference=self.api_reference)
 
         self.dispatcher = Dispatcher()
@@ -42,7 +42,7 @@ class Bot:
 
     async def start(self):
         logging.info("Starting bot...")
-        async with ApiClient(self.token) as client:
+        async with ApiClient(self.token, self.bot_id) as client:
             self.api_client = client
             self.manager = Manager(client, self.discussion_id, self.bot_id, self.api_reference)
 

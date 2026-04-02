@@ -6,14 +6,19 @@ from typing import Optional
 from ..utils.formatter import RequestFormatter
 
 class ApiClient:
-    def __init__(self, token: str, max_retries: int = 5, session: aiohttp.ClientSession | None = None):
+    def __init__(self, token: str, bot_id: int, max_retries: int = 5, session: aiohttp.ClientSession | None = None):
         self._token = token
+        self._bot_id = bot_id
         self._session: aiohttp.ClientSession | None = session
         self.max_retries = max_retries
 
     async def __aenter__(self):
         self._session = aiohttp.ClientSession(
-            headers={"Authorization": f"Token {self._token}"}
+            headers={
+                "Authorization": f"Token {self._token}; userId={self._bot_id}",
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            }
         )
         return self
 
@@ -26,7 +31,7 @@ class ApiClient:
         if self._session is None or self._session.closed:
             self._session = aiohttp.ClientSession(
                 headers={
-                    "Authorization": f"Token {self._token}",
+                    "Authorization": f"Token {self._token}; userId={self._bot_id}",
                     "Content-Type": "application/json",
                 }
             )

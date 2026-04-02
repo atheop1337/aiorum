@@ -181,22 +181,29 @@ class Manager:
         return await self.api_client.request("PATCH", url, data=data)
 
     async def add_tag(self, discussion_id: int, tag_id: int) -> dict:
-        url = self.api_reference.discussion(discussion_id)
-        data = {
-            "data": {
-                "type": "discussions",
-                "attributes": {},
-                "relationships": {
-                "tags": {
-                    "data": [{
-                        "type": "tags",
-                        "id": f"{tag_id}"
-                    }]
-                }
+            url = self.api_reference.discussion(discussion_id)
+            discussion = await self.parse_discussion(discussion_id)
+            
+            if not discussion:
+                return {"error": "Discussion not found"}
+
+            unique_tags = set(discussion.tags)
+            unique_tags.add(str(tag_id))
+            
+            data = {
+                "data": {
+                    "type": "discussions",
+                    "id": str(discussion_id),
+                    "attributes": {},
+                    "relationships": {
+                        "tags": {
+                            "data": [{"type": "tags", "id": tid} for tid in unique_tags]
+                        }
+                    }
                 }
             }
-        }
-        return await self.api_client.request("PATCH", url, data=data)
+            
+            return await self.api_client.request("PATCH", url, data=data)
 
     async def fetch_new_posts(self, max_retries: int = 3) -> list[str]:
         url = self.api_reference.discussion(self.discussion_id)
@@ -288,10 +295,9 @@ class Manager:
                 content, reply_id = HTMLStripper.strip_html_and_extract_reply_id(raw_html)
 
         try:
-            tag = relationships["tags"]["data"][0]["id"]
-        except IndexError:
-            tag = None
-
+            tags = [t["id"] for t in relationships.get("tags", {}).get("data", [])]
+        except: #type: ignore
+            tags = None
         return Discussion(
             id=discussion.get("id"),
             title=attributes.get("title"),
@@ -301,8 +307,8 @@ class Manager:
             created_at=attributes.get("createdAt"),
             updated_at=attributes.get("lastPostedAt"),
             content=content,
-            tag=tag,
-            first_post_id=included[0]["id"],
+            tags=tags,
+            first_post_id=included[0]["id"] if included else None,
             raw=data,
             _manager=self
         )

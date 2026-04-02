@@ -71,7 +71,7 @@ class Discussion:
     created_at: Optional[str]
     updated_at: Optional[str]
     content: str
-    tag: str
+    tags: list[str]
     first_post_id: str
     raw: dict
     _manager: Optional["Manager"] = None
